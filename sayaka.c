@@ -39,9 +39,22 @@ int _run()
     	printf("\nApp:");
         scanf("%s",appname);
         char tmp[255];
+		if(appname[0]='b')
+		{
+			memset(tmp,0,255);
+			for(i=0;i<sizeof(appname);i++)
+				appname[i]=appname[i+1];
+			strcat(tmp,"start http://www.baidu.com/s?wd=");
+			strcat(tmp,appname);
+            system(tmp);
+				get=1;
+			break;
+		}
+		
         for(i=0;i<appcount;i++)
             if(strcmp(appname,shortcut[i])==0)
             {
+				memset(tmp,0,255);
 				strcat(tmp,"start ");
 				strcat(tmp,address[i]);
             	system(tmp);
