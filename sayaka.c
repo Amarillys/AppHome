@@ -43,7 +43,11 @@ int _run()
 		{
 			memset(tmp,0,255);
 			for(i=0;i<strlen(inputname);i++)
+			{
+				if(inputname[i+1]==' ')
+					inputname[i+1]='+';
 				inputname[i]=inputname[i+1];
+			}
 			strcat(tmp,"start http://www.baidu.com/s?wd=");
 			strcat(tmp,inputname);
             system(tmp);
