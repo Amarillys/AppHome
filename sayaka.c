@@ -1,7 +1,7 @@
 /*
 .
 #
-b 百度
+b ??
 */
 
 
@@ -18,41 +18,40 @@ FILE *fp;
 short i;
 short appcount;
 
-char shortcut[255][20];
+char existapp[255][20];
 char address[255][255];
 
 int main(int argc, char*argv[])
 {
-    _init();
+    _init();   //初始化
     _run();
     return 0;
 }
 
 
-
 int _run()
 {
-	short get;
-    char appname[20];
+	short get;    //执行结果标志 
+    char inputname[20];    //输入保存
     while(1)
     {
 		get=0;
-    	printf("\nApp:");
-        scanf("%s",appname);
+    	printf("\n App(#:add .:me b:baidu -:300 )  ):");
+        gets(inputname);
         char tmp[255];
-		if(appname[0]=='b')
+		if(inputname[0]=='b')
 		{
 			memset(tmp,0,255);
-			for(i=0;i<sizeof(appname);i++)
-				appname[i]=appname[i+1];
+			for(i=0;i<strlen(inputname);i++)
+				inputname[i]=inputname[i+1];
 			strcat(tmp,"start http://www.baidu.com/s?wd=");
-			strcat(tmp,appname);
+			strcat(tmp,inputname);
             system(tmp);
 			get=1;
 		}
 		
         for(i=0;i<appcount;i++)
-            if(strcmp(appname,shortcut[i])==0)
+            if(strcmp(inputname,existapp[i])==0)
             {
 				memset(tmp,0,255);
 				strcat(tmp,"start ");
@@ -62,23 +61,25 @@ int _run()
                 break;
             }
 			
-		if(appname[0]=='#')
+		if(inputname[0]=='#')
 			_add();
 			
-		if(appname[0]=='.')
+		if(inputname[0]=='.')
 		{
-			for(i=0;i<sizeof(appname);i++)
-				appname[i]=appname[i+1];
-		    system(appname);
+			for(i=0;i<strlen(inputname);i++)
+				inputname[i]=inputname[i+1];
+		    system(inputname);
 			get=1;
 		}
 		
-		if(appname[0]=='-')
+		if(inputname[0]=='-')
 		{
 			memset(tmp,0,255);
-			for(i=0;i<sizeof(appname);i++)
-				appname[i]=appname[i+1];
-			system("http://300report.jumpw.com/list.html?name="+appname);
+			for(i=0;i<strlen(inputname);i++)
+				inputname[i]=inputname[i+1];
+			strcat(tmp,"start http://300report.jumpw.com/list.html?name=");
+			strcat(tmp,inputname);
+			system(tmp);
 			get=1;
 		}
 		
@@ -86,7 +87,7 @@ int _run()
 		{
 			memset(tmp,0,255);
 			strcat(tmp,"start ");
-			strcat(tmp,appname);
+			strcat(tmp,inputname);
 			system(tmp);
 		}
 	}
@@ -98,10 +99,10 @@ int _add()
     while(a)
     {
 		printf("\n Add Mode:\n    Path:");
-        scanf("%s",address[appcount+1]);
+        gets(address[appcount+1]);
 		printf("    Name :");
-        scanf("%s",shortcut[appcount+1]);
-        fprintf(fp,"%s\n",shortcut[appcount+1]);
+        scanf("%s",existapp[appcount+1]);
+        fprintf(fp,"%s\n",existapp[appcount+1]);
         fprintf(fp,"%s\n",address[appcount+1]);
         printf("QAQ");
         scanf("%d",&a);
@@ -130,7 +131,7 @@ int _init()
 
     for(i=0,appcount=0;!(feof(fp));i++)
     {
-        fscanf(fp,"%s",shortcut[i]);
+        fscanf(fp,"%s",existapp[i]);
         fscanf(fp,"%s",address[i]);
         appcount++;
     }
