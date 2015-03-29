@@ -39,54 +39,56 @@ int _run()
     	printf("\n App(#:add .:me b:baidu -:300 )  ):");
         gets(inputname);
         char tmp[255];
-		if(inputname[0]=='b')
+		switch(inputname[0])
 		{
-			memset(tmp,0,255);
-			for(i=0;i<strlen(inputname);i++)
-			{
-				if(inputname[i+1]==' ')
-					inputname[i+1]='+';
-				inputname[i]=inputname[i+1];
-			}
-			strcat(tmp,"start http://www.baidu.com/s?wd=");
-			strcat(tmp,inputname);
-            system(tmp);
-			get=1;
-		}
-		
-        for(i=0;i<appcount;i++)
-            if(strcmp(inputname,existapp[i])==0)
-            {
+			case 'b':
 				memset(tmp,0,255);
-				strcat(tmp,"start ");
-				strcat(tmp,address[i]);
-            	system(tmp);
+				for(i=0;i<strlen(inputname);i++)
+				{
+					if(inputname[i+1]==' ')
+						inputname[i+1]='+';
+					inputname[i]=inputname[i+1];
+				}
+				strcat(tmp,"start http://www.baidu.com/s?wd=");
+				strcat(tmp,inputname);
+				system(tmp);
 				get=1;
-                break;
-            }
+				break;
+				
+			case '#':
+				_add();
+				break;
+				
+			case '.':
+				for(i=0;i<strlen(inputname);i++)
+					inputname[i]=inputname[i+1];
+				system(inputname);
+				get=1;
+				break;
 			
-		if(inputname[0]=='#')
-			_add();
-			
-		if(inputname[0]=='.')
-		{
-			for(i=0;i<strlen(inputname);i++)
-				inputname[i]=inputname[i+1];
-		    system(inputname);
-			get=1;
-		}
-		
-		if(inputname[0]=='-')
-		{
-			memset(tmp,0,255);
-			for(i=0;i<strlen(inputname);i++)
-				inputname[i]=inputname[i+1];
-			strcat(tmp,"start http://300report.jumpw.com/list.html?name=");
-			strcat(tmp,inputname);
-			system(tmp);
-			get=1;
-		}
-		
+			case '-':
+				memset(tmp,0,255);
+				for(i=0;i<strlen(inputname);i++)
+					inputname[i]=inputname[i+1];
+				strcat(tmp,"start http://300report.jumpw.com/list.html?name=");
+				strcat(tmp,inputname);
+				system(tmp);
+				get=1;
+				break;
+				
+			default:
+				for(i=0;i<appcount;i++)
+				if(strcmp(inputname,existapp[i])==0)
+				{
+					memset(tmp,0,255);
+					strcat(tmp,"start ");
+					strcat(tmp,address[i]);
+					system(tmp);
+					get=1;
+					break;
+				}
+		}		
+				
 		if(get==0)
 		{
 			memset(tmp,0,255);
@@ -140,4 +142,3 @@ int _init()
         appcount++;
     }
 }
-
