@@ -104,6 +104,7 @@ int _add()
     int a;
     while(a)
     {
+    	fflush(stdin);
 		printf("\n Add Mode:\n    Path:");
         gets(address[appcount+1]);
 		printf("    Name :");
@@ -114,6 +115,7 @@ int _add()
         scanf("%d",&a);
         appcount++;
     }
+    fflush(stdin);
     fclose(fp);
 	_init();
 	_run();
