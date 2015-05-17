@@ -1,29 +1,28 @@
-/*
-.
-#
-b ??
-*/
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <conio.h>
 
 int _run(void);
 int _add(void);
 int _del(void);
 int _init(void);
+int _detect(char *inputname,int ilen);
 
 FILE *fp;
-short i;
 short appcount;
+short endi,firstdetect,firstinput;
+short get;
+short formerlen,tmpstrlen;
 
 char existapp[255][20];
 char address[255][255];
+char copyapp[255][20];
+char tmp[255];
 
 int main(int argc, char*argv[])
 {
-    _init();   //初始化
+    _init();
     _run();
     return 0;
 }
@@ -31,80 +30,127 @@ int main(int argc, char*argv[])
 
 int _run()
 {
-	short get;    //执行结果标志 
-    char inputname[20];    //输入保存
+	short _i,_select;
+    char inputname[20];
     while(1)
     {
-		get=0;
-    	printf("\n App(#:add .:me b:baidu -:300 )  ):");
-        gets(inputname);
-        char tmp[255];
-		switch(inputname[0])
-		{
-			case 'b':
-				memset(tmp,0,255);
-				for(i=0;i<strlen(inputname);i++)
-				{
-					if(inputname[i+1]==' ')
-						inputname[i+1]='+';
-					inputname[i]=inputname[i+1];
-				}
-				strcat(tmp,"start http://www.baidu.com/s?wd=");
-				strcat(tmp,inputname);
-				system(tmp);
-				get=1;
-				break;
-				
-			case '#':
-				_add();
-				break;
-				
-			case '.':
-				for(i=0;i<strlen(inputname);i++)
-					inputname[i]=inputname[i+1];
-				system(inputname);
-				get=1;
-				break;
+    	printf("\n App[ #-:add .->me b->baidu ] --->");
+    	memset(inputname,0,20);
+    	//endi=0;
+    	firstdetect = 1;
+    	firstinput = 1;
+		formerlen = 0;
+        for( _i=0;inputname[_i]=getch();_i++)
+        {
 			
-			case '-':
+			if(inputname[_i]==13)
+            {
+            	printf("\r\n");
+            	inputname[_i]='\0';
+            	firstdetect = 0;
 				memset(tmp,0,255);
-				for(i=0;i<strlen(inputname);i++)
-					inputname[i]=inputname[i+1];
-				strcat(tmp,"start http://300report.jumpw.com/list.html?name=");
-				strcat(tmp,inputname);
-				system(tmp);
-				get=1;
-				break;
+				strcat(tmp,"start ");
+  				strcat(tmp,address[_select]);
+  				system(tmp);
+    			get=1;                
+                break;
+            }
+            if( firstinput == 1 )
+            {	
+            	if(inputname[0]=='#')
+            		_add();
+					
+            	if(inputname[0]=='b')
+            	{
+            		inputname[0]='\0';
+					printf("Baidu Search :");
+            		gets(inputname); 
+        			memset(tmp,0,255);
+        			strcat(tmp,"start http://www.baidu.com/s?wd=");
+        			strcat(tmp,inputname);
+        			system(tmp);
+        			_run();
+            	}
 				
-			default:
-				for(i=0;i<appcount;i++)
-				if(strcmp(inputname,existapp[i])==0)
+				if( inputname[0]=='.')
 				{
-					memset(tmp,0,255);
-					strcat(tmp,"start ");
-					strcat(tmp,address[i]);
-					system(tmp);
-					get=1;
-					break;
+					printf("Command :");
+					inputname[0]='\0';
+            		gets(inputname); 
+					system(inputname);
+					_run();
 				}
-		}		
-				
-		if(get==0)
-		{
-			memset(tmp,0,255);
-			strcat(tmp,"start ");
-			strcat(tmp,inputname);
-			system(tmp);
-		}
-	}
+            	putchar(inputname[_i]);
+            	_select = _detect(inputname,_i);
+  	    		firstinput = 0;
+            }
+     		else
+      		{	
+				putchar(inputname[_i]);
+ 	    		_select = _detect(inputname,_i);
+       		}
+        }
+    }
 }
-//http://300report.jumpw.com/list.html?name=Amarillys
+
+int _detect(char *inputname,int ilen)
+{
+    short i,j;
+	int k,l;
+    get=0;l=0;
+	char copyinput[20];
+	memset(copyinput,0,20);
+	strcat(copyinput,inputname);
+	
+	if( get == 0 )
+	{ 
+ 		for(i=0;i<appcount-1;i++)
+   		{
+			memset(copyapp[i],0,20);
+            strcat(copyapp[i],existapp[i]);
+            copyapp[i][ilen+1]='\0';
+        }
+		
+        for(i=0;i<appcount+1;i++)
+        	if(strcmp(copyinput,copyapp[i])==0)
+        	{
+            	for( j = 1,tmpstrlen = strlen( existapp[i] ) ; j < tmpstrlen - ilen ;j++)
+                	putchar(existapp[i][j+ilen]);
+				
+				k=formerlen-ilen;
+				if(firstinput==1)	
+					k=tmpstrlen-ilen;
+				
+				while((formerlen--)-tmpstrlen>0)
+					putchar('\0');
+				
+            	for(l=1;l<k;l++)
+            		{putchar('\b');}
+				get=1;
+				formerlen = tmpstrlen;
+				//system("pause");
+           		break;
+        	}	
+    }
+    if(get==0 && endi ==1 && firstdetect == 0)
+    {
+        memset(tmp,0,255);
+        strcat(tmp,"start ");
+        strcat(tmp,inputname);
+        system(tmp);
+    }
+    firstdetect = 0;
+	firstinput = 0;
+    return i;
+}
+
 int _add()
 {
     int a;
+    a = 1; 
     while(a)
     {
-    	fflush(stdin);
+        fflush(stdin);
 		printf("\n Add Mode:\n    Path:");
         gets(address[appcount+1]);
 		printf("    Name :");
@@ -129,14 +175,16 @@ int _del()
 
 int _init()
 {
+	short i;
+
     if((fp=fopen("app.dat","r"))==NULL)
     {
         fp=fopen("app.dat","w");
         appcount=0;
     }
     fclose(fp);
-    fp=fopen("app.dat","a+");
-
+    fp=fopen("app.dat","r");
+	
     for(i=0,appcount=0;!(feof(fp));i++)
     {
         fscanf(fp,"%s",existapp[i]);
