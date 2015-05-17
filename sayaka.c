@@ -150,14 +150,15 @@ int _add()
     a = 1; 
     while(a)
     {
-        fflush(stdin);
+		fflush(stdin);
+		fp=fopen("app.dat","a");
 		printf("\n Add Mode:\n    Path:");
         gets(address[appcount+1]);
 		printf("    Name :");
         scanf("%s",existapp[appcount+1]);
         fprintf(fp,"%s\n",existapp[appcount+1]);
         fprintf(fp,"%s\n",address[appcount+1]);
-        printf("QAQ");
+        printf("QAQ:");
         scanf("%d",&a);
         appcount++;
     }
@@ -190,5 +191,6 @@ int _init()
         fscanf(fp,"%s",existapp[i]);
         fscanf(fp,"%s",address[i]);
         appcount++;
-    }
+	}
+	fclose(fp);
 }
