@@ -15,6 +15,7 @@ short endi,firstdetect,firstinput;
 short get;
 short formerlen,tmpstrlen;
 
+
 char existapp[255][20];
 char address[255][255];
 char copyapp[255][20];
@@ -32,6 +33,7 @@ int _run()
 {
 	short _i,_select;
     char inputname[20];
+    int backlen; 
     while(1)
     {
     	printf("\n App[ #-:add .->me b->baidu ] --->");
@@ -42,20 +44,47 @@ int _run()
 		formerlen = 0;
         for( _i=0;inputname[_i]=getch();_i++)
         {
+			if(inputname[_i]=='\b')  //deal with the backspack key
+			{
+				backlen=formerlen;
+				putchar('\b');
+				while((formerlen--)>-1)
+					putchar('\0');
+				
+				while((backlen--)>-1)
+					putchar('\b');
+					inputname[_i-1]=0; 
+				_i-=2;
+				continue;
+			}
 			
-			if(inputname[_i]==13)
+			if(inputname[_i]==13)	//deal with the enter key
             {
             	printf("\r\n");
             	inputname[_i]='\0';
             	firstdetect = 0;
-				memset(tmp,0,255);
-				strcat(tmp,"start ");
-  				strcat(tmp,address[_select]);
-  				system(tmp);
-    			get=1;                
-                break;
+            	
+            	if(get==1)
+            	{
+	            	memset(tmp,0,255);
+					strcat(tmp,"start ");
+  					strcat(tmp,address[_select]);
+  					system(tmp);
+    				get=1;                
+                	break;
+	            }
+	            else
+	            {
+	            	memset(tmp,0,255);
+					strcat(tmp,"start ");
+  					strcat(tmp,inputname);
+  					system(tmp);
+    				get=1;                
+                	break;
+				} 
+				
             }
-            if( firstinput == 1 )
+            if( firstinput == 1 )	//the first input key,which decide the function
             {	
             	if(inputname[0]=='#')
             		_add();
@@ -125,19 +154,25 @@ int _detect(char *inputname,int ilen)
 					putchar('\0');
 				
             	for(l=1;l<k;l++)
-            		{putchar('\b');}
+            		putchar('\b');
 				get=1;
 				formerlen = tmpstrlen;
 				//system("pause");
            		break;
-        	}	
+        	}
+			else
+				get=0;	
     }
-    if(get==0 && endi ==1 && firstdetect == 0)
+
+    if(get==0)   //other command in system 
     {
-        memset(tmp,0,255);
-        strcat(tmp,"start ");
-        strcat(tmp,inputname);
-        system(tmp);
+		l=k=formerlen-ilen;
+ 		while((k--)>0)
+			putchar('\0');
+				
+  		while(l-->0)
+ 			putchar('\b');
+
     }
     firstdetect = 0;
 	firstinput = 0;
