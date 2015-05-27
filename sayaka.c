@@ -14,7 +14,8 @@ short appcount;
 short endi,firstdetect,firstinput;
 short get;
 short formerlen,tmpstrlen;
-
+int lastselect[10];
+int last,_last;
 
 char existapp[255][20];
 char address[255][255];
@@ -23,6 +24,8 @@ char tmp[255];
 
 int main(int argc, char*argv[])
 {
+	_last=last=9;
+	memset(lastselect,0,10);
     _init();
     _run();
     return 0;
@@ -33,7 +36,7 @@ int _run()
 {
 	short _i,_select;
     char inputname[20];
-    int backlen; 
+    int backlen,j,upkey; 
     while(1)
     {
     	printf("\n App[ #-:add .->me b->baidu ] --->");
@@ -42,10 +45,13 @@ int _run()
     	firstdetect = 1;
     	firstinput = 1;
 		formerlen = 0;
+		
         for( _i=0;inputname[_i]=getch();_i++)
-        {
-			if(inputname[_i]=='\b')  //deal with the backspack key
+        {			
+			if(inputname[_i]=='\b' && get == 1)  //deal with the backspack key
 			{
+				inputname[_i]=0;
+				inputname[_i-1]=0;
 				backlen=formerlen;
 				putchar('\b');
 				while((formerlen--)>-1)
@@ -53,11 +59,41 @@ int _run()
 				
 				while((backlen--)>-1)
 					putchar('\b');
-					inputname[_i-1]=0; 
+				printf("%s",inputname); 
+				if(_i=1)
+					firstinput=1;
 				_i-=2;
+				get=0;
 				continue;
 			}
 			
+			if(inputname[_i]=='\b' && get == 0)
+			{	inputname[_i]=0;
+				inputname[_i-1]=0;
+				putchar('\b');				
+				putchar('\0');
+				putchar('\b'); 	
+				_i-=2;
+				continue;
+				}
+			
+			if(inputname[_i]==-32)
+				if((j=getch())==75)
+				{
+					putchar('\b');
+					_i-=2;
+					continue;
+				}
+			
+			if(inputname[_i]==-32)
+				if((j=getch())==77)
+				{
+				
+					putchar(inputname[_i]);
+					_i+=1;
+					continue;
+				}
+				
 			if(inputname[_i]==13)	//deal with the enter key
             {
             	printf("\r\n");
@@ -70,7 +106,11 @@ int _run()
 					strcat(tmp,"start ");
   					strcat(tmp,address[_select]);
   					system(tmp);
-    				get=1;                
+					while((lastselect[_last]==_select) || (lastselect[_last]!=0))
+						_last--;
+					lastselect[_last] = _select ;
+    				get=1;
+					//last--;
                 	break;
 	            }
 	            else
@@ -79,15 +119,32 @@ int _run()
 					strcat(tmp,"start ");
   					strcat(tmp,inputname);
   					system(tmp);
-    				get=1;                
+    				get=1;
                 	break;
 				} 
-				
             }
+			
             if( firstinput == 1 )	//the first input key,which decide the function
             {	
             	if(inputname[0]=='#')
             		_add();
+				
+				if(inputname[0]==-32)  //detect the key "up"
+					if((j=getch())==72)
+					{
+						printf("%s",existapp[(lastselect[last])]);
+						_select=lastselect[last];
+						last--;						
+						for(j=0;j<strlen(existapp[(lastselect[last])]);j++)
+							putchar('\b');
+						get=1;
+						
+						upkey=1;
+						_i=-1;
+						inputname[0]=0;
+						continue;
+					}
+					
 					
             	if(inputname[0]=='b')
             	{
@@ -109,7 +166,7 @@ int _run()
 					system(inputname);
 					_run();
 				}
-            	putchar(inputname[_i]);
+				putchar(inputname[_i]);
             	_select = _detect(inputname,_i);
   	    		firstinput = 0;
             }
