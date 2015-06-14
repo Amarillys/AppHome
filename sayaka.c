@@ -145,6 +145,16 @@ int _run()
 						continue;
 					}
 					
+		if(inputname[0]=='x')
+            	{
+            		inputname[0]='\0';
+					printf("To Convert :");
+					int d; 
+            		scanf("%d",&d);
+        			printf("                                          ----> %X",d);
+        			_run();
+            	}
+					
 					
             	if(inputname[0]=='b')
             	{
