@@ -3,7 +3,8 @@ A simple c ,just i ilke
 
 Usage:
 
-1.# add a new link of your app
+1.
+  -># add a new link of your app
   ->path: pull the icon of your app into the command window and push the key"enter:
   ->name: input the name of your app so that you can start it using the name
   
@@ -14,7 +15,9 @@ Usage:
 
 3.. start the commmand of cmd
 
-4.you can download the lastest release and the Dictionary on the Source Dictionary of http://nscripter.ys168.com
+4.- you can search the word
+
+Finally,you can download the lastest release and the Dictionary on the Source Dictionary of http://nscripter.ys168.com
 
 2015/07/03
 
