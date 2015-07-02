@@ -26,7 +26,7 @@ char tmp[255];
 
 //EnDictionary
 FILE *DictFile;
-char Comment[2048];
+char Comment[12800];
 char EnWord[5600][32];
 int EnWordOffset[5600];
 char CheckWord[32];
@@ -330,12 +330,13 @@ void InitDict(char FirstWord)   //Get and Save the Word and the Comment
         _run();
     }
 
+
     while(!feof(DictFile))
     {
         fgets(EnWord[i],32,DictFile);
         EnWord[i][strlen(EnWord[i])-1] = '\0';
         EnWordOffset[i] = ftell(DictFile);
-        fgets(Comment,2048,DictFile);
+        fgets(Comment,12800,DictFile);
         i++;
     }
 
@@ -345,11 +346,12 @@ void InitDict(char FirstWord)   //Get and Save the Word and the Comment
 void FindDict(char *Word)   //Search the Word and Print the Comment
 {
     short i;
+    printf("->%s",Word);
     for(i = 0;i < WordCount;i++)
         if(strcmp(Word,EnWord[i]) == 0)
         {
             fseek(DictFile,EnWordOffset[i],SEEK_SET);
-            fgets(Comment,2048,DictFile);
+            fgets(Comment,12800,DictFile);
             printf("---->%s\n\n---->%s\n",EnWord[i],Comment);
             fclose(DictFile);
             _run();
