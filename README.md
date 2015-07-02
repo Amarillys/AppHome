@@ -13,3 +13,9 @@ Usage:
 2.b search the information in the Internet by baidu.
 
 3.. start the commmand of cmd
+
+4.you can download the lastest release on the Source Dictionary of http://nscripter.ys168.com
+
+2015/07/03
+
+->add the function of searching the Dictionary.
