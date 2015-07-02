@@ -14,7 +14,7 @@ Usage:
 
 3.. start the commmand of cmd
 
-4.you can download the lastest release on the Source Dictionary of http://nscripter.ys168.com
+4.you can download the lastest release and the Dictionary on the Source Dictionary of http://nscripter.ys168.com
 
 2015/07/03
 
