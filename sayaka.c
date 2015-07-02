@@ -26,6 +26,7 @@ char tmp[255];
 
 //EnDictionary
 FILE *DictFile;
+FILE *LearnLog;
 char Comment[12800];
 char EnWord[5600][32];
 int EnWordOffset[5600];
@@ -330,7 +331,6 @@ void InitDict(char FirstWord)   //Get and Save the Word and the Comment
         _run();
     }
 
-
     while(!feof(DictFile))
     {
         fgets(EnWord[i],32,DictFile);
@@ -345,8 +345,8 @@ void InitDict(char FirstWord)   //Get and Save the Word and the Comment
 
 void FindDict(char *Word)   //Search the Word and Print the Comment
 {
-    short i;
-    printf("->%s",Word);
+    int i;
+    int log;
     for(i = 0;i < WordCount;i++)
         if(strcmp(Word,EnWord[i]) == 0)
         {
@@ -354,6 +354,14 @@ void FindDict(char *Word)   //Search the Word and Print the Comment
             fgets(Comment,12800,DictFile);
             printf("---->%s\n\n---->%s\n",EnWord[i],Comment);
             fclose(DictFile);
+            printf("\n Add this word to the LearnLog? ->");
+            scanf("%d",&log);
+            if(log == 1)
+            {
+                LearnLog = fopen("LearnLog.txt","a+");
+                fprintf(LearnLog,"Word:%s\nComment:  %s\n",EnWord[i],Comment);
+                fclose(LearnLog);
+            }
             _run();
         }
     printf("                                      --->No Results!QAQ");
