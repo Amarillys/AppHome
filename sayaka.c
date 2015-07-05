@@ -46,7 +46,6 @@ int main(int argc, char*argv[])
 	memset(lastselect,0,10);
     _init();
     _run();
-    CloseHandle(handle);
     return 0;
 }
 
