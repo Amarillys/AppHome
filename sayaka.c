@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <windows.h>
 #include <string.h>
 #include <conio.h>
 
@@ -10,6 +10,12 @@ int _init(void);
 int _detect(char *inputname,int ilen);
 void InitDict(char FirstWord);
 void FindDict(char *Word);
+void Colorfy(unsigned char *StrCom);
+
+inline void NewLine(){
+        putchar('\r');
+        putchar('\n');
+}
 
 FILE *fp;
 short appcount;
@@ -27,7 +33,7 @@ char tmp[255];
 //EnDictionary
 FILE *DictFile;
 FILE *LearnLog;
-char Comment[12800];
+unsigned char Comment[12800];
 char EnWord[5600][32];
 int EnWordOffset[5600];
 char CheckWord[32];
@@ -40,6 +46,7 @@ int main(int argc, char*argv[])
 	memset(lastselect,0,10);
     _init();
     _run();
+    CloseHandle(handle);
     return 0;
 }
 
@@ -347,16 +354,18 @@ void FindDict(char *Word)   //Search the Word and Print the Comment
 {
     int i;
     int log;
+
     for(i = 0;i < WordCount;i++)
         if(strcmp(Word,EnWord[i]) == 0)
         {
             fseek(DictFile,EnWordOffset[i],SEEK_SET);
             fgets(Comment,12800,DictFile);
-            printf("---->%s\n\n---->%s\n",EnWord[i],Comment);
+            printf("---->%s\n\n",EnWord[i]);
+            Colorfy(Comment);
             fclose(DictFile);
-            printf("\n Add this word to the LearnLog? ->");
+            printf("\n Add this word to the LearnLog? [y/n]->");
             scanf("%d",&log);
-            if(log == 1)
+            if(log == 'y')
             {
                 LearnLog = fopen("LearnLog.txt","a+");
                 fprintf(LearnLog,"Word:%s\nComment:  %s\n",EnWord[i],Comment);
@@ -368,3 +377,58 @@ void FindDict(char *Word)   //Search the Word and Print the Comment
     fclose(DictFile);
 }
 
+void Colorfy(unsigned char *StrCom) //词典排版
+{
+    int i = 0;
+    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    if( StrCom[0] == '/')   //音标
+    {
+        putchar('/');
+        i++;
+        SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY |FOREGROUND_RED | FOREGROUND_GREEN);
+        while(StrCom[i] !='/')
+        {
+            putchar(StrCom[i]);
+            i++;
+        }
+        putchar('/');
+        i++;
+    }
+
+    SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY | FOREGROUND_BLUE| FOREGROUND_GREEN | FOREGROUND_RED);
+    for( ;i <= strlen(StrCom);i++)
+    {
+        if( StrCom[i] > 48 && StrCom[i] < 58)   //数字序号
+        {
+            NewLine();
+            putchar(StrCom[i]);
+            putchar(' ');
+            i++;
+            if( StrCom[i] == '.')
+                putchar('.');
+        }
+        else if( StrCom[i] > 128)    //中文解释
+        {
+            SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY |  FOREGROUND_GREEN);
+            putchar(StrCom[i]);
+            i++;
+            putchar(StrCom[i]);
+            i++;
+            while( (StrCom[i] != '.') && (StrCom[i] != ':') && (StrCom[i] != ')')){
+                putchar(StrCom[i]);
+                i++;
+            }
+            putchar(StrCom[i]);
+            if( StrCom[i] == '.')
+                NewLine();
+        }
+        //else if( StrCom[i] == '.')
+            //NewLine();
+        else{
+            SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY | FOREGROUND_BLUE| FOREGROUND_GREEN | FOREGROUND_RED);
+            putchar(StrCom[i]);
+        }
+    }
+    SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY | FOREGROUND_BLUE| FOREGROUND_GREEN );
+}
