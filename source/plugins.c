@@ -1,4 +1,4 @@
-#include "plugins.h"
+#include "../include/plugins.h"
 
 void AddPlugins(char Plugins[]){
     Plugins[0] = '.';
@@ -40,7 +40,7 @@ void EnterPlugins(char FuncChar){
 		case 'd':			//dictionary
 			LookOnDict();
 			break;
-		case 'x':			//convert to hex 
+		case 'x':			//convert to hex
 			ConvertToHex();
 			break;
 		default:
@@ -79,7 +79,7 @@ void LookOnDict(){
 	printf("Word To Check :");
 	fflush(stdin);
 	gets(CheckWord);
-	
+
 	if (!InitDictOK(CheckWord[0], &Dict, &WordCount, Word)){
 		return;
 		fclose(Dict);

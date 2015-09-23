@@ -3,6 +3,7 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="sayaka" />
+		<Option makefile="makefile" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -16,8 +17,8 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/sayaka" prefix_auto="1" extension_auto="1" />
-				<Option object_output="bin/Release/obj/" />
+				<Option output="release/sayaka" prefix_auto="1" extension_auto="1" />
+				<Option object_output="release/obj/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -31,23 +32,26 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="Version.h" />
-		<Unit filename="base.h" />
-		<Unit filename="dict.c">
-			<Option compilerVar="CC" />
+		<Unit filename="icon.rc">
+			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="dict.h" />
+		<Unit filename="include/Version.h" />
+		<Unit filename="include/base.h" />
+		<Unit filename="include/dict.h" />
+		<Unit filename="include/plugins.h" />
+		<Unit filename="include/shortcut.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="plugins.c">
+		<Unit filename="source/dict.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="plugins.h" />
-		<Unit filename="shortcut.c">
+		<Unit filename="source/plugins.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="shortcut.h" />
+		<Unit filename="source/shortcut.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

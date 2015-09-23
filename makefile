@@ -36,13 +36,13 @@ RCFLAGS_RELEASE = $(RCFLAGS)
 LIBDIR_RELEASE = $(LIBDIR)
 LIB_RELEASE = $(LIB)
 LDFLAGS_RELEASE = $(LDFLAGS) -s
-OBJDIR_RELEASE = bin\\Release\\obj
+OBJDIR_RELEASE = release\\obj
 DEP_RELEASE = 
-OUT_RELEASE = bin\\Release\\sayaka.exe
+OUT_RELEASE = release\\sayaka.exe
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)\\dict.o $(OBJDIR_DEBUG)\\main.o $(OBJDIR_DEBUG)\\plugins.o $(OBJDIR_DEBUG)\\shortcut.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)\\icon.o $(OBJDIR_DEBUG)\\main.o $(OBJDIR_DEBUG)\\source\\dict.o $(OBJDIR_DEBUG)\\source\\plugins.o $(OBJDIR_DEBUG)\\source\\shortcut.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)\\dict.o $(OBJDIR_RELEASE)\\main.o $(OBJDIR_RELEASE)\\plugins.o $(OBJDIR_RELEASE)\\shortcut.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)\\icon.o $(OBJDIR_RELEASE)\\main.o $(OBJDIR_RELEASE)\\source\\dict.o $(OBJDIR_RELEASE)\\source\\plugins.o $(OBJDIR_RELEASE)\\source\\shortcut.o
 
 all: debug release
 
@@ -51,6 +51,7 @@ clean: clean_debug clean_release
 before_debug: 
 	cmd /c if not exist bin\\Debug md bin\\Debug
 	cmd /c if not exist $(OBJDIR_DEBUG) md $(OBJDIR_DEBUG)
+	cmd /c if not exist $(OBJDIR_DEBUG)\\source md $(OBJDIR_DEBUG)\\source
 
 after_debug: 
 
@@ -59,26 +60,31 @@ debug: before_debug out_debug after_debug
 out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
 	$(LD) $(LIBDIR_DEBUG) -o $(OUT_DEBUG) $(OBJ_DEBUG)  $(LDFLAGS_DEBUG) $(LIB_DEBUG)
 
-$(OBJDIR_DEBUG)\\dict.o: dict.c
-	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c dict.c -o $(OBJDIR_DEBUG)\\dict.o
+$(OBJDIR_DEBUG)\\icon.o: icon.rc
+	$(WINDRES) -i icon.rc -J rc -o $(OBJDIR_DEBUG)\\icon.o -O coff $(INC_DEBUG)
 
 $(OBJDIR_DEBUG)\\main.o: main.c
 	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c main.c -o $(OBJDIR_DEBUG)\\main.o
 
-$(OBJDIR_DEBUG)\\plugins.o: plugins.c
-	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c plugins.c -o $(OBJDIR_DEBUG)\\plugins.o
+$(OBJDIR_DEBUG)\\source\\dict.o: source\\dict.c
+	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c source\\dict.c -o $(OBJDIR_DEBUG)\\source\\dict.o
 
-$(OBJDIR_DEBUG)\\shortcut.o: shortcut.c
-	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c shortcut.c -o $(OBJDIR_DEBUG)\\shortcut.o
+$(OBJDIR_DEBUG)\\source\\plugins.o: source\\plugins.c
+	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c source\\plugins.c -o $(OBJDIR_DEBUG)\\source\\plugins.o
+
+$(OBJDIR_DEBUG)\\source\\shortcut.o: source\\shortcut.c
+	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c source\\shortcut.c -o $(OBJDIR_DEBUG)\\source\\shortcut.o
 
 clean_debug: 
 	cmd /c del /f $(OBJ_DEBUG) $(OUT_DEBUG)
 	cmd /c rd bin\\Debug
 	cmd /c rd $(OBJDIR_DEBUG)
+	cmd /c rd $(OBJDIR_DEBUG)\\source
 
 before_release: 
-	cmd /c if not exist bin\\Release md bin\\Release
+	cmd /c if not exist release md release
 	cmd /c if not exist $(OBJDIR_RELEASE) md $(OBJDIR_RELEASE)
+	cmd /c if not exist $(OBJDIR_RELEASE)\\source md $(OBJDIR_RELEASE)\\source
 
 after_release: 
 
@@ -87,22 +93,26 @@ release: before_release out_release after_release
 out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 	$(LD) $(LIBDIR_RELEASE) -o $(OUT_RELEASE) $(OBJ_RELEASE)  $(LDFLAGS_RELEASE) $(LIB_RELEASE)
 
-$(OBJDIR_RELEASE)\\dict.o: dict.c
-	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c dict.c -o $(OBJDIR_RELEASE)\\dict.o
+$(OBJDIR_RELEASE)\\icon.o: icon.rc
+	$(WINDRES) -i icon.rc -J rc -o $(OBJDIR_RELEASE)\\icon.o -O coff $(INC_RELEASE)
 
 $(OBJDIR_RELEASE)\\main.o: main.c
 	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c main.c -o $(OBJDIR_RELEASE)\\main.o
 
-$(OBJDIR_RELEASE)\\plugins.o: plugins.c
-	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c plugins.c -o $(OBJDIR_RELEASE)\\plugins.o
+$(OBJDIR_RELEASE)\\source\\dict.o: source\\dict.c
+	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c source\\dict.c -o $(OBJDIR_RELEASE)\\source\\dict.o
 
-$(OBJDIR_RELEASE)\\shortcut.o: shortcut.c
-	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c shortcut.c -o $(OBJDIR_RELEASE)\\shortcut.o
+$(OBJDIR_RELEASE)\\source\\plugins.o: source\\plugins.c
+	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c source\\plugins.c -o $(OBJDIR_RELEASE)\\source\\plugins.o
+
+$(OBJDIR_RELEASE)\\source\\shortcut.o: source\\shortcut.c
+	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c source\\shortcut.c -o $(OBJDIR_RELEASE)\\source\\shortcut.o
 
 clean_release: 
 	cmd /c del /f $(OBJ_RELEASE) $(OUT_RELEASE)
-	cmd /c rd bin\\Release
+	cmd /c rd release
 	cmd /c rd $(OBJDIR_RELEASE)
+	cmd /c rd $(OBJDIR_RELEASE)\\source
 
 .PHONY: before_debug after_debug clean_debug before_release after_release clean_release
 

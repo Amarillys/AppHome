@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include "shortcut.h"
+#include "../include/shortcut.h"
 
 void AddShortCut(struct App ShortCut[],short *appcount){
     int a;
@@ -29,18 +29,19 @@ void AntiFill(short length){
 		putchar('\b');
 }
 
-short AutoFill(int length, char EntireStr[]){
+short AutoFill(int length, char EntireStr[],bool WillBack){
 	short i,count;
 	i = length;
 	count = (int)strlen(EntireStr) - i;
 	for (; i < count + length; i++)
 		putchar(EntireStr[i]);
-	for (i = length; i < count + length; i++)
-		putchar('\b');
+	if(WillBack)
+        for (i = length; i < count + length; i++)
+            putchar('\b');
 	return count;		//return the number of the char that have been auto filled.
 }
 
-void LoadShortCut(struct App ShortCut[],short *appcount){
+void LoadShortCut(struct App ShortCut[],short *AppCount){
 	FILE *fp;
 	if ((fp = fopen("app.dat", "r")) == NULL){
 		printf("  !:Cannot find app.dat , now create new one.\n");
@@ -56,7 +57,7 @@ void LoadShortCut(struct App ShortCut[],short *appcount){
 		fscanf(fp, "%s", ShortCut[i].Path);
 		count++;
 	}
-	*appcount = count;
+	*AppCount = count;
 	fclose(fp);
 }
 
